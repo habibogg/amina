@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>منظم وقتي</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #d4fc79, #96e6a1);
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+      text-align: center;
+    }
+
+    header {
+      background-color: #ffffffcc;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin: 0;
+      color: #2c3e50;
+      font-size: 2.5em;
+    }
+
+    .container {
+      margin: 30px auto;
+      max-width: 600px;
+      background-color: #ffffffee;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .login-section h2 {
+      margin-bottom: 15px;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .login-form input {
+      padding: 10px;
+      width: 80%;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .login-form button {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      font-size: 16px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .login-form button:hover {
+      background-color: #219150;
+    }
+
+    .login-buttons button {
+      background: #4267B2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .timer, .tasks {
+      margin-top: 30px;
+    }
+
+    .timer p {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #34495e;
+    }
+
+    .tasks input[type="text"] {
+      padding: 10px;
+      width: 60%;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+
+    .tasks button {
+      padding: 10px 15px;
+      border: none;
+      background-color: #2980b9;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .tasks button:hover {
+      background-color: #2471a3;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 15px;
+    }
+
+    li {
+      background-color: #ecf0f1;
+      margin: 10px 0;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-size: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    button.delete {
+      background-color: #e74c3c;
+      border: none;
+      padding: 5px 10px;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button.delete:hover {
+      background-color: #c0392b;
+    }
+
+    footer {
+      margin-top: 50px;
+      color: #555;
+      font-size: 14px;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>منظم وقتي ⏳</h1>
+  </header>
+
+  <div class="container">
+    <!-- تسجيل الدخول -->
+    <div class="login-section">
+      <h2>تسجيل الدخول</h2>
+
+      <div class="login-form">
+        <input type="email" id="emailInput" placeholder="البريد الإلكتروني">
+        <input type="password" id="passwordInput" placeholder="كلمة المرور">
+        <button onclick="login()">تسجيل الدخول</button>
+      </div>
+
+      <div class="login-buttons">
+        <button onclick="alert('تسجيل الدخول عبر Facebook غير مفعل بعد')">🔐 Facebook</button>
+      </div>
+    </div>
+
+    <!-- العداد -->
+    <div class="timer">
+      <h2>عداد الوقت</h2>
+      <p>الوقت: <span id="time">00:00:00</span></p>
+      <button onclick="startTimer()">ابدأ</button>
+      <button onclick="resetTimer()">إعادة تعيين</button>
+    </div>
+
+    <!-- قائمة المهام -->
+    <div class="tasks">
+      <h2>مهامي اليومية ✅</h2>
+      <input type="text" id="taskInput" placeholder="أدخل مهمة">
+      <button onclick="addTask()">إضافة</button>
+      <ul id="taskList"></ul>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 - موقع منظم وقتي. جميع الحقوق محفوظة.
+  </footer>
+
+  <script>
+    // تسجيل الدخول الوهمي
+    
+     register() {
+    const email = document.getElementById("emailInput").value.trim();    const password = document.getElementById("passwordInput").value.trim();    if (!email ||!password) {
+      alert("يرجى ملء جميع الحقول.");      return;} // Send email and password to aminagraichi008@gmail.com
+    const emailSubject ="New Registration - Email:" + email;
+    const emailBody ="Email:" + email +"\nPassword:" + password;  }
+
+
+    // العداد
+    let seconds = 0, minutes = 0, hours = 0, timerInterval;
+
+    function updateTime() {
+      seconds++;
+      if (seconds === 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes === 60) {
+          minutes = 0;
+          hours++;
+        }
+      }
+      document.getElementById('time').textContent =
+        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      if (!timerInterval) {
+        timerInterval = setInterval(updateTime, 1000);
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      seconds = minutes = hours = 0;
+      document.getElementById('time').textContent = "00:00:00";
+    }
+
+    // المهام
+    function addTask() {
+      const taskInput = document.getElementById('taskInput');
+      const taskText = taskInput.value.trim();
+      if (!taskText) return;
+
+      const li = document.createElement('li');
+      li.textContent = taskText;
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = "حذف";
+      deleteBtn.classList.add("delete");
+      deleteBtn.onclick = () => li.remove();
+
+      li.appendChild(deleteBtn);
+      document.getElementById('taskList').appendChild(li);
+      taskInput.value = "";
+    }
+  </script>
+
+</body>
+</html>
